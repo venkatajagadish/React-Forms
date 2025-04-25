@@ -1,4 +1,5 @@
 import { useState } from "react";
+import Input from "./Input";
 
 export default function StateLogin() {
   const [formState, setFormState] = useState({
@@ -12,6 +13,8 @@ export default function StateLogin() {
   });
 
   const emailIsValid = !isFormDirty.email || formState.email?.includes("@");
+  const passwordIsValid =
+    !isFormDirty.password || formState.password.trim().length > 8;
 
   function handleSubmit(event) {
     event.preventDefault();
@@ -28,34 +31,26 @@ export default function StateLogin() {
   return (
     <form onSubmit={handleSubmit}>
       <h2>Login</h2>
-
       <div className="control-row">
-        <div className="control no-margin">
-          <label htmlFor="email">Email</label>
-          <input
-            id="email"
-            type="email"
-            name="email"
-            value={formState.email}
-            onChange={() => handleChange("email", event.target.value)}
-            onBlur={() => handleBlur("email", true)}
-          />
-          {!emailIsValid && <div id="error">Please add a valid email</div>}
-        </div>
-
-        <div className="control no-margin">
-          <label htmlFor="password">Password</label>
-          <input
-            id="password"
-            type="password"
-            name="password"
-            value={formState.password}
-            onChange={() => handleChange("password", event.target.value)}
-            onBlur={() => handleBlur("password", true)}
-          />
-        </div>
+        <Input
+          id="email"
+          type="email"
+          name="email"
+          value={formState.email}
+          onChange={() => handleChange("email", event.target.value)}
+          onBlur={() => handleBlur("email", true)}
+          error={!emailIsValid && "Please enter valid email!!"}
+        />
+        <Input
+          id="password"
+          type="password"
+          name="password"
+          value={formState.password}
+          onChange={() => handleChange("password", event.target.value)}
+          onBlur={() => handleBlur("password", true)}
+          error={!passwordIsValid && "Please enter valid password!!"}
+        />
       </div>
-
       <p className="form-actions">
         <button className="button button-flat">Reset</button>
         <button className="button">Login</button>

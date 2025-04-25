@@ -1,31 +1,26 @@
-import { useState } from "react";
 import Input from "./Input";
+import useInput from "../Hooks/UseInput";
 
 export default function StateLogin() {
-  const [formState, setFormState] = useState({
-    email: "",
-    password: "",
-  });
+  const {
+    enteredValue: email,
+    isFieldDirty: isEmailDirty,
+    handleBlur: handleEmailBlur,
+    handleChange: handleEmailChange,
+  } = useInput("");
+  const {
+    enteredValue: password,
+    isFieldDirty: isPasswordDirty,
+    handleBlur: handlePasswordBlur,
+    handleChange: handlePasswordChange,
+  } = useInput("");
 
-  const [isFormDirty, setIsFormDirty] = useState({
-    email: false,
-    password: false,
-  });
-
-  const emailIsValid = !isFormDirty.email || formState.email?.includes("@");
-  const passwordIsValid =
-    !isFormDirty.password || formState.password.trim().length > 8;
+  const emailIsValid = !isEmailDirty || email.includes("@");
+  const passwordIsValid = !isPasswordDirty || password.trim().length > 8;
 
   function handleSubmit(event) {
     event.preventDefault();
     console.log(formState);
-  }
-  function handleChange(field, value) {
-    setFormState((prevState) => ({ ...prevState, [field]: value }));
-    setIsFormDirty((prevState) => ({ ...prevState, [field]: false }));
-  }
-  function handleBlur(field, value) {
-    setIsFormDirty((prevState) => ({ ...prevState, [field]: value }));
   }
 
   return (
@@ -34,20 +29,22 @@ export default function StateLogin() {
       <div className="control-row">
         <Input
           id="email"
+          title="EMAIL"
           type="email"
           name="email"
-          value={formState.email}
-          onChange={() => handleChange("email", event.target.value)}
-          onBlur={() => handleBlur("email", true)}
+          value={email}
+          onChange={() => handleEmailChange("email", event.target.value)}
+          onBlur={() => handleEmailBlur("email", true)}
           error={!emailIsValid && "Please enter valid email!!"}
         />
         <Input
           id="password"
+          title="PASSWORD"
           type="password"
           name="password"
-          value={formState.password}
-          onChange={() => handleChange("password", event.target.value)}
-          onBlur={() => handleBlur("password", true)}
+          value={password}
+          onChange={() => handlePasswordChange("password", event.target.value)}
+          onBlur={() => handlePasswordBlur("password", true)}
           error={!passwordIsValid && "Please enter valid password!!"}
         />
       </div>
